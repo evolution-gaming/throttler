@@ -41,7 +41,7 @@ class RequestThrottler(
   allowedRate: => Long,
   throttlingPeriodMillis: => Long = 1000L,
   concurrencyLevel: => Int = 100,
-  expirationMillis: => Long = 5 * 60 * 1000,
+  expirationMillis: => Long = 5L * 60 * 1000,
   initialCapacity: => Int = 3000) extends LazyLogging {
 
   private val cache: LoadingCache[String, TokenBucket] =
