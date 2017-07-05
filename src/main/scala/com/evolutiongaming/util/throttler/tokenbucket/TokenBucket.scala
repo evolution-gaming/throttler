@@ -22,7 +22,6 @@ import java.util.concurrent.atomic.AtomicLong
   * A token bucket is used for rate limiting access to a portion of code.
   *
   * @see <a href="http://en.wikipedia.org/wiki/Token_bucket">Token Bucket on Wikipedia</a>
-  * @see <a href="http://en.wikipedia.org/wiki/Leaky_bucket">Leaky Bucket on Wikipedia</a>
   *
   * @param ratePerPeriod  Allowed number of tokens which can be consumed per period.
   * @param periodInMillis Period duration in milliseconds.

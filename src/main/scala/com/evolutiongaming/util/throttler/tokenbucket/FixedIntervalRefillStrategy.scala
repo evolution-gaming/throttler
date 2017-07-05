@@ -18,7 +18,7 @@ package com.evolutiongaming.util.throttler.tokenbucket
 
 /**
   * A token bucket refill strategy that will provide N tokens for a token bucket to consume every T milliseconds.
-  * The tokens are refilled in bursts rather than at a fixed rate.  This refill strategy will never allow more than
+  * The tokens are refilled in bursts rather than at a fixed rate. This refill strategy will never allow more than
   * N tokens to be consumed during a window of time T.
   *
   * @param numTokensPerPeriod The number of tokens to add to the bucket every period.
