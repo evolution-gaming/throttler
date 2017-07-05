@@ -37,21 +37,21 @@ import com.typesafe.scalalogging.LazyLogging
   */
 class RequestThrottler(
   rejectedMeter: () => Unit,
-  throttlingEnabled: => Boolean,
-  allowedRate: => Long,
-  throttlingPeriodMillis: => Long = 1000L,
-  concurrencyLevel: => Int = 100,
-  expirationMillis: => Long = 5L * 60 * 1000,
-  initialCapacity: => Int = 3000) extends LazyLogging {
+  throttlingEnabled: () => Boolean,
+  allowedRate: () => Long,
+  throttlingPeriodMillis: () => Long = () => 1000L,
+  concurrencyLevel: () => Int = () => 100,
+  expirationMillis: () => Long = () => 5L * 60 * 1000,
+  initialCapacity: () => Int = () => 3000) extends LazyLogging {
 
   private val cache: LoadingCache[String, TokenBucket] =
     CacheBuilder
       .newBuilder()
-      .concurrencyLevel(concurrencyLevel)
-      .expireAfterAccess(expirationMillis, TimeUnit.MILLISECONDS)
-      .initialCapacity(initialCapacity)
+      .concurrencyLevel(concurrencyLevel())
+      .expireAfterAccess(expirationMillis(), TimeUnit.MILLISECONDS)
+      .initialCapacity(initialCapacity())
       .build(new CacheLoader[String, TokenBucket] {
-        override def load(key: String): TokenBucket = TokenBucket(allowedRate, throttlingPeriodMillis)
+        override def load(key: String): TokenBucket = TokenBucket(allowedRate(), throttlingPeriodMillis())
       })
 
   /**
@@ -62,7 +62,7 @@ class RequestThrottler(
     * @return {{{true}}} if request is allowed, {{{false}}} otherwise.
     */
   def isRequestAllowed(throttlingKey: String, force: Boolean = false): Boolean =
-    if (throttlingEnabled || force) {
+    if (throttlingEnabled() || force) {
       val throttler = cache get throttlingKey
       val requestAllowed = throttler.tryConsume()
       if (!requestAllowed) {

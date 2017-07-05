@@ -71,8 +71,8 @@ class RequestThrottlerSpec extends FlatSpec with Matchers with MockitoSugar with
   private abstract class Scope(val enabled: Boolean = true, val rate: Long = 10L, val period: Long = 1000L) {
     val requestThrottler = new RequestThrottler(
       rejectedMeter = () => {},
-      throttlingEnabled = enabled, 
-      allowedRate = rate,
-      throttlingPeriodMillis = period)
+      throttlingEnabled = () => enabled,
+      allowedRate = () => rate,
+      throttlingPeriodMillis = () => period)
   }
 }
