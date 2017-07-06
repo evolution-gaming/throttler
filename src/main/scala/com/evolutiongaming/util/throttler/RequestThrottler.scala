@@ -27,29 +27,32 @@ import com.typesafe.scalalogging.LazyLogging
   *
   * Uses [[com.google.common.cache.LoadingCache]] under the hood.
   *
-  * @param rejectedMeter          A function which should be called on all rejects to meter their rate.
-  * @param throttlingEnabled      A global setting which allows to enable / disable the {{{RequestThrottler}}}.
-  * @param allowedRate            Allowed number of messages / requests which can be consumed per period.
-  * @param throttlingPeriodMillis Period duration in milliseconds.
-  * @param concurrencyLevel       See [[com.google.common.cache.CacheBuilder#concurrencyLevel]]
-  * @param expirationMillis       See [[com.google.common.cache.CacheBuilder#expireAfterAccess]]
-  * @param initialCapacity        See [[com.google.common.cache.CacheBuilder#initialCapacity]]
+  * @param rejectedMeter              A function which should be called on all rejects to meter their rate.
+  * @param throttlingEnabled          A global setting which allows to enable / disable the {{{RequestThrottler}}}.
+  * @param allowedRate                Allowed number of messages / requests which can be consumed per period.
+  * @param throttlingPeriodMillis     Period duration in milliseconds.
+  * @param concurrencyLevel           See [[com.google.common.cache.CacheBuilder#concurrencyLevel]]
+  * @param expirationMillis           See [[com.google.common.cache.CacheBuilder#expireAfterAccess]]
+  * @param expirationAfterWriteMillis See [[com.google.common.cache.CacheBuilder#expireAfterWrite]]
+  * @param initialCapacity            See [[com.google.common.cache.CacheBuilder#initialCapacity]]
   */
 class RequestThrottler(
   rejectedMeter: () => Unit,
   throttlingEnabled: () => Boolean,
   allowedRate: () => Long,
   throttlingPeriodMillis: () => Long = () => 1000L,
-  concurrencyLevel: () => Int = () => 100,
-  expirationMillis: () => Long = () => 5L * 60 * 1000,
-  initialCapacity: () => Int = () => 3000) extends LazyLogging {
+  concurrencyLevel: Int = 100,
+  expirationMillis: Long = 5L * 60 * 1000,
+  expirationAfterWriteMillis: Long = 60L * 60 * 1000,
+  initialCapacity: Int = 3000) extends LazyLogging {
 
   private val cache: LoadingCache[String, TokenBucket] =
     CacheBuilder
       .newBuilder()
-      .concurrencyLevel(concurrencyLevel())
-      .expireAfterAccess(expirationMillis(), TimeUnit.MILLISECONDS)
-      .initialCapacity(initialCapacity())
+      .concurrencyLevel(concurrencyLevel)
+      .expireAfterAccess(expirationMillis, TimeUnit.MILLISECONDS)
+      .expireAfterWrite(expirationAfterWriteMillis, TimeUnit.MILLISECONDS)
+      .initialCapacity(initialCapacity)
       .build(new CacheLoader[String, TokenBucket] {
         override def load(key: String): TokenBucket = TokenBucket(allowedRate(), throttlingPeriodMillis())
       })
@@ -62,7 +65,7 @@ class RequestThrottler(
     * @return {{{true}}} if request is allowed, {{{false}}} otherwise.
     */
   def isRequestAllowed(throttlingKey: String, force: Boolean = false): Boolean =
-    if (throttlingEnabled() || force) {
+    if (force || throttlingEnabled()) {
       val throttler = cache get throttlingKey
       val requestAllowed = throttler.tryConsume()
       if (!requestAllowed) {
