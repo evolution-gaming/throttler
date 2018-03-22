@@ -5,8 +5,8 @@ sudo: false
 language: scala
 
 scala:
-  - 2.12.3
-  - 2.11.11
+  - 2.12.4
+  - 2.11.12
 
 jdk: oraclejdk8
 
@@ -19,4 +19,13 @@ notifications:
     on_success: never
     on_failure: always
     rooms:
-      secure: "ZkG0Ru1NcqJdGuf6gesro4xhAwU/zYCrU3FUOksYMtsdhd+SbVwLNXLlcBXZRQmsPKOPfC6McEyO6jc5Y05SXBkTNBzOw8Fe/bxEbBKYnxLQY7QrimfMstDu5Rz7xksNGDGiVxwXR+OtF3ixS6hzCR1rrHDrYmFQ/lPMGU+kyTJ54Vu81CBrhNbbuhswMx2N+QFLQDv090o8PgXa6YJJRo4k2qReQcZ6h7cCMVgfqzuJda/kmShl6HnOU4RjsIT5TLYWobLFdTJzPQdjtpASdwJyu2LAjF72BeO5jlNNp5eufrkRCaFbSt+NEYXV63DQqSb0QrPmur/n8M4RgumReDxNK3wPqrL4TanLsMcmTMEzVt2/GKJvt1HEila9HdLiZBhhDjV5NaekEbMmxh9azwUN2xpP6wlHbe3TkZsnly1r5V62hKePXP61Gatlp1HIXIGvfyLCDDyrvVzy1K+EELi3qDD865xgMJFB8BfRth6DUTzuc46Sqv/Iq03edp6VVUh9LUzrp4pU2BLsjMHU/aii+e5eoeqHLOzTphkZByg07z2zv9Jk27vgR1PO4G+LVV4l3RJVT8bU4mzV5ONX4k9Ss2UGaMQbvtao0hQGAo6XdRDyh3NfJVq/YG+vcDJZjOOsaUxlZRv2XWFpX6eiEu3sxYCz3kscmV0359HDeQ8="
+      secure: "XknDw37QxCTz+7vetahDDSeUI+x9KoVAkEauoS9ThnvCMX0Qoaq7OVDM5E3bZ2p0Mdo455cksGPHZXoIfoO2ZZ2+a8eDhcRgNGY2xzPaf/rLSpRMttA98czkXZCFuIG852qCUMFCsjk7O9+IiWjM/pnQE2sxAYsUPkDTtbz+2ifWrwQpY3VhyU27s+dKFSe7aGf0+ClkjU6bAOiKU9e0+1UD+YGoK4+tptkhFgcr+FcnnfMh1pCOtZ/hO99BNcjSS1Y0QqDz4Gmdi7IcjLvfxJpmG/AAa5UPhuGYr8+80rqSfyBhZqobTgMnarqZv2ih82xwnfT7S4Zb+74vqMpl5m0kEITfBLNLqk6i9FD7hqZDnWUaOVq5B5GyHII2oFWU+poazg9u8z4kIpTJZYgGomRVZ2ubZ/H+RvpxIm4TZgsWxyPnKQBeFvYY7xUPIqK12Ys17dbcdS0+Vjbe7J+S9cDzhuEWywXLbLYit2JxAZ0yJHGSYfyI5Y0454IzoZQ+tIuMTg+P31IRSBHqoUoxkYnsQyKQ/my33VuhiN9ujSc1y/z4QzUp0vf+drPlwEGm3CcpjNxq21VnlgJv6RAJUCRqr9BtzqfF+sUezt1ku4B9SpumgJQ9T/1l0YewzkrmVWvd+gUfp2reLV/+Ag/9S8mtf5WISXu22amsjXeZggo="
+
+cache:
+  directories:
+    - $HOME/.ivy2/cache
+    - $HOME/.sbt
+
+before_cache:
+  - find $HOME/.ivy2/cache -name "ivydata-*.properties" -print -delete
+  - find $HOME/.sbt        -name "*.lock"               -print -delete
