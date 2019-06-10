@@ -3,7 +3,7 @@ package com.evolutiongaming.util.throttler
 import java.util.concurrent.Executors
 
 import org.scalatest.concurrent.ScalaFutures
-import org.scalatest.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.time.SpanSugar
 import org.scalatest.{FlatSpec, Matchers}
 
@@ -25,15 +25,7 @@ class RequestThrottlerSpec extends FlatSpec with Matchers with MockitoSugar with
     val TestKeys = 10
     val Threads = 10
 
-    implicit val ec = new ExecutionContext {
-      val threadPool = Executors newFixedThreadPool Threads
-
-      def execute(runnable: Runnable) = {
-        threadPool submit runnable
-      }
-
-      def reportFailure(t: Throwable) = {}
-    }
+    implicit val executor = ExecutionContext.fromExecutor(Executors.newFixedThreadPool(Threads))
 
     val futures = for {_ <- 1 to TestKeys} yield {
       Future {
