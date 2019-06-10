@@ -18,36 +18,55 @@ package com.evolutiongaming.util.throttler
 import java.util.concurrent.TimeUnit
 
 import com.evolutiongaming.util.throttler.tokenbucket.TokenBucket
-import com.google.common.cache.{CacheBuilder, CacheLoader, LoadingCache}
+import com.google.common.cache.{CacheBuilder, CacheLoader}
 import com.typesafe.scalalogging.LazyLogging
 
-/**
-  * RequestThrottler allows to limit the maximum number of requests / messages which can be processed
-  * within a specific time period for a specific user / resource, etc.
-  *
-  * Uses [[com.google.common.cache.LoadingCache]] under the hood.
-  *
-  * @param rejectedMeter              A function which should be called on all rejects to meter their rate.
-  * @param throttlingEnabled          A global setting which allows to enable / disable the {{{RequestThrottler}}}.
-  * @param allowedRate                Allowed number of messages / requests which can be consumed per period.
-  * @param throttlingPeriodMillis     Period duration in milliseconds.
-  * @param concurrencyLevel           See [[com.google.common.cache.CacheBuilder#concurrencyLevel]]
-  * @param expirationMillis           See [[com.google.common.cache.CacheBuilder#expireAfterAccess]]
-  * @param expirationAfterWriteMillis See [[com.google.common.cache.CacheBuilder#expireAfterWrite]]
-  * @param initialCapacity            See [[com.google.common.cache.CacheBuilder#initialCapacity]]
-  */
-class RequestThrottler(
-  rejectedMeter: () => Unit,
-  throttlingEnabled: () => Boolean,
-  allowedRate: () => Long,
-  throttlingPeriodMillis: () => Long = () => 1000L,
-  concurrencyLevel: Int = 100,
-  expirationMillis: Long = 5L * 60 * 1000,
-  expirationAfterWriteMillis: Long = 60L * 60 * 1000,
-  initialCapacity: Int = 3000) extends LazyLogging {
+trait RequestThrottler {
 
-  private val cache: LoadingCache[String, TokenBucket] =
-    CacheBuilder
+  /**
+    * Checks if a request for the specified {{{throttlingKey}}} is allowed at the moment.
+    *
+    * @param key   Meaningful key which identifies a single user (i.e. session id or connection id).
+    * @param force If {{{true}}}, throttling is enforced ignoring {{{throttlingEnabled}}} setting.
+    * @return {{{true}}} if request is allowed, {{{false}}} otherwise.
+    */
+  def isAllowed(key: String, force: Boolean = false): Boolean
+}
+
+object RequestThrottler extends LazyLogging {
+
+  def const(allowed: Boolean): RequestThrottler = new RequestThrottler {
+    def isAllowed(key: String, force: Boolean) = allowed
+  }
+
+
+  /**
+    * RequestThrottler allows to limit the maximum number of requests / messages which can be processed
+    * within a specific time period for a specific user / resource, etc.
+    *
+    * Uses [[com.google.common.cache.LoadingCache]] under the hood.
+    *
+    * @param rejectedMeter              A function which should be called on all rejects to meter their rate.
+    * @param enabled                    A global setting which allows to enable / disable the {{{RequestThrottler}}}.
+    * @param allowedRate                Allowed number of messages / requests which can be consumed per period.
+    * @param throttlingPeriodMillis     Period duration in milliseconds.
+    * @param concurrencyLevel           See [[com.google.common.cache.CacheBuilder#concurrencyLevel]]
+    * @param expirationMillis           See [[com.google.common.cache.CacheBuilder#expireAfterAccess]]
+    * @param expirationAfterWriteMillis See [[com.google.common.cache.CacheBuilder#expireAfterWrite]]
+    * @param initialCapacity            See [[com.google.common.cache.CacheBuilder#initialCapacity]]
+    */
+  def apply(
+    rejectedMeter: () => Unit,
+    enabled: () => Boolean,
+    allowedRate: () => Long,
+    throttlingPeriodMillis: () => Long = () => 1000L,
+    concurrencyLevel: Int = 100,
+    expirationMillis: Long = 5L * 60 * 1000,
+    expirationAfterWriteMillis: Long = 60L * 60 * 1000,
+    initialCapacity: Int = 3000
+  ): RequestThrottler = {
+
+    val cache = CacheBuilder
       .newBuilder()
       .concurrencyLevel(concurrencyLevel)
       .expireAfterAccess(expirationMillis, TimeUnit.MILLISECONDS)
@@ -57,21 +76,17 @@ class RequestThrottler(
         override def load(key: String): TokenBucket = TokenBucket(allowedRate(), throttlingPeriodMillis())
       })
 
-  /**
-    * Checks if a request for the specified {{{throttlingKey}}} is allowed at the moment.
-    *
-    * @param throttlingKey Meaningful key which identifies a single user (i.e. session id or connection id).
-    * @param force         If {{{true}}}, throttling is enforced ignoring {{{throttlingEnabled}}} setting.
-    * @return {{{true}}} if request is allowed, {{{false}}} otherwise.
-    */
-  def isRequestAllowed(throttlingKey: String, force: Boolean = false): Boolean =
-    if (force || throttlingEnabled()) {
-      val throttler = cache get throttlingKey
-      val requestAllowed = throttler.tryConsume()
-      if (!requestAllowed) {
-        logger warn s"Request from $throttlingKey was discarded, rate ${ throttler.ratePerPeriod } per ${ throttler.periodInMillis } ms"
-        rejectedMeter()
-      }
-      requestAllowed
-    } else true
+    new RequestThrottler {
+      def isAllowed(key: String, force: Boolean = false): Boolean =
+        if (force || enabled()) {
+          val throttler = cache get key
+          val requestAllowed = throttler.tryConsume()
+          if (!requestAllowed) {
+            logger warn s"Request from $key was discarded, rate ${ throttler.ratePerPeriod } per ${ throttler.periodInMillis } ms"
+            rejectedMeter()
+          }
+          requestAllowed
+        } else true
+    }
+  }
 }

@@ -15,7 +15,7 @@ class RequestThrottlerSpec extends FlatSpec with Matchers with MockitoSugar with
    
     val keys = List("session1", "session2", "session3")
 
-    val failedList = for (key <- keys; _ <- 0L to rate * 2; if !(requestThrottler isRequestAllowed key)) yield key
+    val failedList = for (key <- keys; _ <- 0L to rate * 2; if !(requestThrottler isAllowed key)) yield key
 
     failedList shouldBe empty
   }
@@ -32,25 +32,25 @@ class RequestThrottlerSpec extends FlatSpec with Matchers with MockitoSugar with
         val key = System.nanoTime().toString
 
         for {_ <- 1L to rate} {
-          requestThrottler isRequestAllowed key shouldBe true
+          requestThrottler isAllowed key shouldBe true
         }
         for {_ <- 1L to rate * 2} {
-          requestThrottler isRequestAllowed key shouldBe false
+          requestThrottler isAllowed key shouldBe false
         }
 
         Thread sleep period / 2
 
         for {_ <- 1L to rate * 2} {
-          requestThrottler isRequestAllowed key shouldBe false
+          requestThrottler isAllowed key shouldBe false
         }
 
         Thread sleep period / 2
 
         for {_ <- 1L to rate} {
-          requestThrottler isRequestAllowed key shouldBe true
+          requestThrottler isAllowed key shouldBe true
         }
         for {_ <- 1L to rate * 2} {
-          requestThrottler isRequestAllowed key shouldBe false
+          requestThrottler isAllowed key shouldBe false
         }
       }
     }
@@ -61,9 +61,9 @@ class RequestThrottlerSpec extends FlatSpec with Matchers with MockitoSugar with
   }
   
   private abstract class Scope(val enabled: Boolean = true, val rate: Long = 10L, val period: Long = 1000L) {
-    val requestThrottler = new RequestThrottler(
+    val requestThrottler = RequestThrottler(
       rejectedMeter = () => {},
-      throttlingEnabled = () => enabled,
+      enabled = () => enabled,
       allowedRate = () => rate,
       throttlingPeriodMillis = () => period)
   }
