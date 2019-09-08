@@ -18,5 +18,5 @@ FixedIntervalRefillStrategy is a token bucket refill strategy that will provide 
 ```scala
 resolvers += Resolver.bintrayRepo("evolutiongaming", "maven")
 
-libraryDependencies += "com.evolutiongaming" %% "throttler" % "1.4"
+libraryDependencies += "com.evolutiongaming" %% "throttler" % "2.0.1"
 ```
