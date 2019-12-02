@@ -1,8 +1,9 @@
 package com.evolutiongaming.util.throttler.tokenbucket
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 
-class TokenBucketSpec extends FlatSpec with Matchers {
+class TokenBucketSpec extends AnyFlatSpec with Matchers {
 
   "TokenBucket" should "block subsequent calls which exceed the rate per period" in new Scope {
 
