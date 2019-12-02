@@ -14,7 +14,7 @@ bintrayOrganization := Some("evolutiongaming")
 
 scalaVersion := crossScalaVersions.value.head
 
-crossScalaVersions := Seq("2.13.0", "2.12.9")
+crossScalaVersions := Seq("2.13.1", "2.12.10")
 
 releaseCrossBuild := true
 
@@ -23,10 +23,11 @@ scalacOptions in (Compile,doc) ++= Seq("-no-link-warnings")
 resolvers += Resolver.bintrayRepo("evolutiongaming", "maven")
 
 libraryDependencies ++= Seq(
-  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.2",
-  "com.google.guava"            % "guava"         % "23.0",
-  "com.google.code.findbugs"    % "jsr305"        % "3.0.2",
-  "org.scalatest"              %% "scalatest"     % "3.0.8"  % Test,
-  "org.mockito"                 % "mockito-core"  % "3.0.0" % Test)
+  "com.typesafe.scala-logging" %% "scala-logging"         % "3.9.2",
+  "com.google.guava"            % "guava"                 % "19.0",
+  "com.google.code.findbugs"    % "jsr305"                % "3.0.2",
+  "org.scalatest"              %% "scalatest"             % "3.1.0"       % Test,
+  "org.mockito"                 % "mockito-core"          % "3.2.0"       % Test,
+  "org.scalatestplus"          %% "scalatestplus-mockito" % "1.0.0-SNAP5" % Test)
 
 licenses := Seq(("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0")))

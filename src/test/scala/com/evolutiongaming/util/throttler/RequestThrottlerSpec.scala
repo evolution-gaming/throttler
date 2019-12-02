@@ -3,13 +3,14 @@ package com.evolutiongaming.util.throttler
 import java.util.concurrent.Executors
 
 import org.scalatest.concurrent.ScalaFutures
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatest.time.SpanSugar
-import org.scalatest.{FlatSpec, Matchers}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class RequestThrottlerSpec extends FlatSpec with Matchers with MockitoSugar with ScalaFutures with SpanSugar {
+class RequestThrottlerSpec extends AnyFlatSpec with Matchers with MockitoSugar with ScalaFutures with SpanSugar {
 
   "RequestThrottler" should "allow all requests if disabled" in new Scope(enabled = false) {
    
