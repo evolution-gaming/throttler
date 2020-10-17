@@ -24,7 +24,7 @@ resolvers += Resolver.bintrayRepo("evolutiongaming", "maven")
 
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging"         % "3.9.2",
-  "com.google.guava"            % "guava"                 % "19.0",
+  "com.google.guava"            % "guava"                 % "30.0-jre",
   "com.google.code.findbugs"    % "jsr305"                % "3.0.2",
   "org.scalatest"              %% "scalatest"             % "3.2.1"       % Test,
   "org.mockito"                 % "mockito-core"          % "3.4.4"       % Test,
