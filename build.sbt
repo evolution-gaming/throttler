@@ -23,7 +23,7 @@ scalacOptions in (Compile,doc) ++= Seq("-no-link-warnings")
 resolvers += Resolver.bintrayRepo("evolutiongaming", "maven")
 
 libraryDependencies ++= Seq(
-  "com.typesafe.scala-logging" %% "scala-logging"         % "3.9.2",
+  "com.typesafe.scala-logging" %% "scala-logging"         % "3.9.3",
   "com.google.guava"            % "guava"                 % "19.0",
   "com.google.code.findbugs"    % "jsr305"                % "3.0.2",
   "org.scalatest"              %% "scalatest"             % "3.2.1"       % Test,
