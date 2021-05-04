@@ -16,7 +16,7 @@ crossScalaVersions := Seq("2.13.5", "2.12.13")
 
 releaseCrossBuild := true
 
-scalacOptions in (Compile,doc) ++= Seq("-no-link-warnings")
+Compile / doc / scalacOptions ++= Seq("-no-link-warnings")
 
 publishTo := Some(Resolver.evolutionReleases)
 
