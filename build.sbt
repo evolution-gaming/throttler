@@ -2,13 +2,13 @@ name := "throttler"
 
 organization := "com.evolutiongaming"
 
-homepage := Some(new URL("http://github.com/evolution-gaming/throttler"))
+homepage := Some(url("https://github.com/evolution-gaming/throttler"))
 
 startYear := Some(2017)
 
 organizationName := "Evolution"
 
-organizationHomepage := Some(url("http://evolution.com"))
+organizationHomepage := Some(url("https://evolution.com"))
 
 scalaVersion := crossScalaVersions.value.head
 
