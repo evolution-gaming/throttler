@@ -29,3 +29,7 @@ libraryDependencies ++= Seq(
   "org.scalatestplus"          %% "scalatestplus-mockito" % "1.0.0-M2" % Test)
 
 licenses := Seq(("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0")))
+
+//addCommandAlias("check", "all versionPolicyCheck Compile/doc")
+addCommandAlias("check", "show version")
+addCommandAlias("build", "+all compile test")
