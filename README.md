@@ -23,5 +23,5 @@ FixedIntervalRefillStrategy is a token bucket refill strategy that will provide 
 ```scala
 addSbtPlugin("com.evolution" % "sbt-artifactory-plugin" % "0.0.2")
 
-libraryDependencies += "com.evolutiongaming" %% "throttler" % "2.0.1"
+libraryDependencies += "com.evolutiongaming" %% "throttler" % "3.0.0"
 ```
