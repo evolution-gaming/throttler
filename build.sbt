@@ -14,7 +14,7 @@ scalaVersion := crossScalaVersions.value.head
 
 crossScalaVersions := Seq("3.8.4", "2.13.18")
 
-releaseCrossBuild := true
+ThisBuild / versionScheme := Some("early-semver")
 
 Compile / doc / scalacOptions ++= Seq("-no-link-warnings")
 
