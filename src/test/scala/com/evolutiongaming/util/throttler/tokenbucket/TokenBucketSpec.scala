@@ -3,7 +3,6 @@ package com.evolutiongaming.util.throttler.tokenbucket
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers
 
-
 class TokenBucketSpec extends AnyFlatSpec with Matchers {
 
   "TokenBucket" should "block subsequent calls which exceed the rate per period" in new Scope {
@@ -23,12 +22,12 @@ class TokenBucketSpec extends AnyFlatSpec with Matchers {
       bucket.tryConsume() shouldBe true
     }
 
-    bucket tryConsume 3 shouldBe false
-    bucket tryConsume 2 shouldBe true
+    bucket.tryConsume(3) shouldBe false
+    bucket.tryConsume(2) shouldBe true
 
-    bucket refill 2
+    bucket.refill(2)
 
-    bucket tryConsume 3 shouldBe false
+    bucket.tryConsume(3) shouldBe false
     bucket.tryConsume() shouldBe true
     bucket.tryConsume() shouldBe true
     bucket.tryConsume() shouldBe false
@@ -42,7 +41,7 @@ class TokenBucketSpec extends AnyFlatSpec with Matchers {
 
     bucket.tryConsume() shouldBe false
 
-    Thread sleep bucket.periodInMillis
+    Thread.sleep(bucket.periodInMillis)
 
     for (_ <- 1L to bucket.ratePerPeriod) {
       bucket.tryConsume() shouldBe true
@@ -59,7 +58,7 @@ class TokenBucketSpec extends AnyFlatSpec with Matchers {
     bucket.tryConsume() shouldBe true
     bucket.tryConsume() shouldBe false
 
-    bucket refill 5
+    bucket.refill(5)
 
     bucket.tryConsume() shouldBe true
     bucket.tryConsume() shouldBe true
