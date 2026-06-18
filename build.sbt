@@ -25,7 +25,7 @@ publishTo := Some(Resolver.evolutionReleases)
 
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.6",
-  "com.google.guava" % "guava" % "19.0",
+  "com.google.guava" % "guava" % "33.6.0-jre",
   "com.google.code.findbugs" % "jsr305" % "3.0.2",
   "org.scalatest" %% "scalatest" % "3.2.20" % Test,
   "org.mockito" % "mockito-core" % "5.23.0" % Test,
