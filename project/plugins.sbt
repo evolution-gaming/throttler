@@ -6,4 +6,4 @@ addSbtPlugin("com.evolution" % "sbt-scalac-opts-plugin" % "0.2.0")
 
 addSbtPlugin("com.evolution" % "sbt-artifactory-plugin" % "0.1.2")
 
-addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.6.1")
+addSbtPlugin("org.scalameta" % "sbt-scalafmt" % "2.6.2")
