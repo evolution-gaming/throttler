@@ -2,13 +2,13 @@ name := "throttler"
 
 organization := "com.evolutiongaming"
 
-homepage := Some(url("https://github.com/evolution-gaming/throttler"))
+homepage := Some(uri("https://github.com/evolution-gaming/throttler"))
 
 startYear := Some(2017)
 
 organizationName := "Evolution"
 
-organizationHomepage := Some(url("https://evolution.com"))
+organizationHomepage := Some(uri("https://evolution.com"))
 
 scalaVersion := crossScalaVersions.value.head
 
@@ -31,9 +31,9 @@ libraryDependencies ++= Seq(
   "org.mockito" % "mockito-core" % "5.23.0" % Test,
 )
 
-licenses := Seq(("MIT", url("https://opensource.org/licenses/MIT")))
+licenses := Seq(("MIT", uri("https://opensource.org/licenses/MIT")))
 
 //addCommandAlias("check", "all versionPolicyCheck Compile/doc")
 addCommandAlias("check", "+scalafmtCheckRepo")
 addCommandAlias("fmt", "+scalafmtRepo")
-addCommandAlias("build", "+all compile test")
+addCommandAlias("build", "+all compile testFull")
