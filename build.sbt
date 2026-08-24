@@ -15,6 +15,7 @@ scalaVersion := crossScalaVersions.value.head
 crossScalaVersions := Seq("3.3.8", "2.13.18")
 
 ThisBuild / versionScheme := Some("early-semver")
+ThisBuild / versionPolicyIntention := Compatibility.BinaryCompatible
 
 Compile / doc / scalacOptions ++= Seq("-no-link-warnings")
 
@@ -33,7 +34,6 @@ libraryDependencies ++= Seq(
 
 licenses := Seq(("MIT", uri("https://opensource.org/licenses/MIT")))
 
-//addCommandAlias("check", "all versionPolicyCheck Compile/doc")
-addCommandAlias("check", "+scalafmtCheckRepo")
-addCommandAlias("fmt", "+scalafmtRepo")
+addCommandAlias("check", "all scalafmtCheckRepo versionPolicyCheck Compile/doc")
+addCommandAlias("fmt", "scalafmtRepo")
 addCommandAlias("build", "+all compile testFull")
