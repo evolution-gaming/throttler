@@ -12,7 +12,7 @@ organizationHomepage := Some(uri("https://evolution.com"))
 
 scalaVersion := crossScalaVersions.value.head
 
-crossScalaVersions := Seq("3.3.8", "2.13.18")
+crossScalaVersions := Seq("3.9.0", "2.13.18")
 
 ThisBuild / versionScheme := Some("early-semver")
 ThisBuild / versionPolicyIntention := Compatibility.BinaryCompatible
