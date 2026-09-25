@@ -19,7 +19,7 @@ import com.evolutiongaming.util.throttler.tokenbucket.TokenBucket
 import com.google.common.cache.{CacheBuilder, CacheLoader}
 import com.typesafe.scalalogging.LazyLogging
 
-import java.util.concurrent.TimeUnit
+import java.time.Duration
 
 trait RequestThrottler {
 
@@ -79,8 +79,8 @@ object RequestThrottler extends LazyLogging {
     val cache = CacheBuilder
       .newBuilder()
       .concurrencyLevel(concurrencyLevel)
-      .expireAfterAccess(expirationMillis, TimeUnit.MILLISECONDS)
-      .expireAfterWrite(expirationAfterWriteMillis, TimeUnit.MILLISECONDS)
+      .expireAfterAccess(Duration.ofMillis(expirationMillis))
+      .expireAfterWrite(Duration.ofMillis(expirationAfterWriteMillis))
       .initialCapacity(initialCapacity)
       .build(new CacheLoader[String, TokenBucket] {
         override def load(key: String): TokenBucket = TokenBucket(allowedRate(), throttlingPeriodMillis())
