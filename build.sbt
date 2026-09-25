@@ -16,6 +16,7 @@ crossScalaVersions := Seq("3.3.8", "2.13.18")
 
 ThisBuild / versionScheme := Some("early-semver")
 ThisBuild / versionPolicyIntention := Compatibility.BinaryCompatible
+versionPolicyIgnored += "com.google.guava" % "guava"
 
 Compile / doc / scalacOptions ++= Seq("-no-link-warnings")
 
@@ -26,7 +27,7 @@ publishTo := Some(Resolver.evolutionReleases)
 
 libraryDependencies ++= Seq(
   "com.typesafe.scala-logging" %% "scala-logging" % "3.9.6",
-  "com.google.guava" % "guava" % "19.0",
+  "com.google.guava" % "guava" % "33.7.1-jre",
   "com.google.code.findbugs" % "jsr305" % "3.0.2",
   "org.scalatest" %% "scalatest" % "3.2.20" % Test,
   "org.mockito" % "mockito-core" % "5.24.0" % Test,
