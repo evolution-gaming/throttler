@@ -30,7 +30,7 @@ libraryDependencies ++= Seq(
   "com.google.guava" % "guava" % "33.8.0-jre",
   "com.google.code.findbugs" % "jsr305" % "3.0.2",
   "org.scalatest" %% "scalatest" % "3.2.20" % Test,
-  "org.mockito" % "mockito-core" % "5.24.0" % Test,
+  "org.mockito" % "mockito-core" % "5.25.0" % Test,
 )
 
 licenses := Seq(("MIT", uri("https://opensource.org/licenses/MIT")))
